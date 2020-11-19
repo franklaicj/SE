@@ -1,41 +1,22 @@
 <?php
 require_once("dbconnect.php");
 
-function addJob($title,$msg, $urgent) {
-	global $conn;
-	$sql = "insert into todo (title, content,urgent, addTime, status) values ('$title','$msg', '$urgent', NOW(),0);";
-	mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL	
+function addForm($sID, $sName, $father, $mother, $category) {
+	
 }
 
-function cancelJob($jobID) {
-	global $conn;
-	$sql = "update todo set status = 3 where id=$jobID and status <> 2;";
-	mysqli_query($conn,$sql);
-	//return T/F
-}
-
-function updateJob($id,$title,$msg, $urgent) {
-	global $conn;
-	if ($id== -1) {
-		addJob($title,$msg, $urgent);
-	} else {
-		$sql = "update todo set title='$title', content='$msg', urgent='$urgent' where id=$id;";
-		mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL
-	}
-}
-
-function getJobList($bossMode) {
+function getFormList($bossMode) {
 	global $conn;
 	if ($bossMode) {
-		$sql = "select *, TIME_TO_SEC(TIMEDIFF(NOW(), addTime)) diff from todo order by status, urgent desc;";
+		$sql = "select * from student;";
 	} else {
-		$sql = "select *, TIME_TO_SEC(TIMEDIFF(NOW(), addTime)) diff from todo where status = 0;";
+		$sql = "select * from student where sID = [$sID];";
 	}
 	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
 	return $result;
 }
 
-function getJobDetail($id) {
+function getFormDetail($id) {
 	global $conn;
 	if ($id == -1) { //-1 stands for adding a new record
 		$rs=[
@@ -52,20 +33,17 @@ function getJobDetail($id) {
 	return $rs;
 }
 
-function setFinished($jobID) {
-	global $conn;
-	$sql = "update todo set status = 1, finishTime=NOW() where id=$jobID and status = 0;";
-	mysqli_query($conn,$sql) or die("MySQL query error"); //執行SQL
-	
+function secretoryFinished($sID) {
+
 }
 
-function rejectJob($jobID){
+function rejectForm($sID){
 	global $conn;
 	$sql = "update todo set status = 0 where id=$jobID and status = 1;";
 	mysqli_query($conn,$sql);
 }
 
-function setClosed($jobID) {
+function casePass($sID) {
 	global $conn;
 	$sql = "update todo set status = 2 where id=$jobID and status = 1;";
 	mysqli_query($conn,$sql);

@@ -20,15 +20,6 @@ if ($result = mysqli_query($conn,$sql)) {
 return $isValid;
 }
 
-
-
-function getUserPwd() {
-	global $conn;
-	$sql = "select * from user;";
-	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
-	return $result;
-}
-
 function setUserPassword($userName){
 		return false;
 }

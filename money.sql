@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2020 at 07:57 AM
+-- Generation Time: Nov 20, 2020 at 08:06 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -47,7 +47,7 @@ CREATE TABLE `student` (
 INSERT INTO `student` (`sID`, `sName`, `father`, `mother`, `category`, `mComment`, `money`, `sComment`, `status`) VALUES
 (2, '1', '3', '4', '低收入戶', '789', 5000, '987654', 4),
 (3, '2', '4', '5', '低收入戶', '456', 5000, '123', 0),
-(4, 'student', '123', '123', '低收入戶', '456', 5000, '', 2),
+(4, 'student', '123', '123', '低收入戶', '456', 5000, '32165', 3),
 (103, 'student', '789', '456', '中低收入戶', '', 5000, '', 1),
 (123, 'test', '456', '789', '低收入戶', '', 5000, '', 1),
 (456, 'student', '', '', '低收入戶', '', 5000, '', 1),
@@ -74,7 +74,7 @@ INSERT INTO `user` (`id`, `loginID`, `password`, `role`) VALUES
 (1, 'student', '123', 1),
 (2, 'mentor', '123', 2),
 (3, 'sec', '123', 3),
-(4, 'boss', '123', 9);
+(4, 'boss', '123', 4);
 
 --
 -- Indexes for dumped tables

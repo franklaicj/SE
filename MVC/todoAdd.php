@@ -13,6 +13,6 @@ if ($sID && $sName && $category) {
 	echo "<a href='todoListView.php'>Back</a>";
 } else {
 	echo "未填入學號 請重新輸入";
-	echo "<a href='todoListForm'>Back</a>";
+	echo "<a href='todoAddForm.php'>Back</a>";
 }
 ?>

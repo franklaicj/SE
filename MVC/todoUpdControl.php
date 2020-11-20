@@ -12,10 +12,10 @@ $money=(int)$_POST['money'];
 $sComment=mysqli_real_escape_string($conn,$_POST['sComment']);
 $status=(int)$_POST['status'];
 $decision=$_POST['decision'];
-if($_SESSION['role'] == 9 && $decision == 'reject'){
+if($_SESSION['role'] == 4 && $decision == 'reject'){
 	updateJob($sID, $father, $mother, $category, $mComment, $money, $sComment ,-1);
 	$msg="已否決";
-}elseif (($_SESSION['role'] == 2 && $mComment) || ($_SESSION['role'] == 3 && $sComment) || ($_SESSION['role'] == 9 && $decision == 'confirm')) {
+}elseif (($_SESSION['role'] == 2 && $mComment) || ($_SESSION['role'] == 3 && $sComment) || ($_SESSION['role'] == 4 && $decision == 'confirm')) {
 	if($money >= 5000 && $money <= 20000){
 		updateJob($sID, $father, $mother, $category, $mComment, $money, $sComment ,$status);
 		$msg="簽核成功";

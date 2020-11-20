@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2020 at 08:06 AM
+-- Generation Time: Nov 20, 2020 at 09:05 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.9
 
@@ -48,10 +48,11 @@ INSERT INTO `student` (`sID`, `sName`, `father`, `mother`, `category`, `mComment
 (2, '1', '3', '4', '低收入戶', '789', 5000, '987654', 4),
 (3, '2', '4', '5', '低收入戶', '456', 5000, '123', 0),
 (4, 'student', '123', '123', '低收入戶', '456', 5000, '32165', 3),
-(103, 'student', '789', '456', '中低收入戶', '', 5000, '', 1),
+(103, 'student', '789', '456', '中低收入戶', '32465456', 5000, '65465', 0),
 (123, 'test', '456', '789', '低收入戶', '', 5000, '', 1),
-(456, 'student', '', '', '低收入戶', '', 5000, '', 1),
-(789, 'student', '456', '123', '低收入戶', '', 5000, '', 1);
+(456, 'student', '', '', '低收入戶', '357', 5000, '', 2),
+(789, 'student', '456', '123', '低收入戶', '123', 5000, '654', 4),
+(987, 'student', '654', '321', '低收入戶', '', 5000, '', 1);
 
 -- --------------------------------------------------------
 
@@ -100,7 +101,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `sID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=790;
+  MODIFY `sID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=988;
 
 --
 -- AUTO_INCREMENT for table `user`

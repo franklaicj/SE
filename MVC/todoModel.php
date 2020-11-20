@@ -9,7 +9,7 @@ function updateJob($sID,$father,$mother,$category,$mComment,$money,$sComment,$st
 
 function getJobList($role) {
 	global $conn;
-	$sql = "SELECT * FROM student where status <= $role order by status desc;";
+	$sql = "SELECT * FROM student order by status desc;";
 	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
 	return $result;
 }

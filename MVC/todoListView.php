@@ -46,7 +46,9 @@ $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核
   </tr>
 <?php
 while ($rs=mysqli_fetch_assoc($result)){
-	if((($_SESSION['role']==1 && $_SESSION['uID'] != $rs['sName']) || ($_SESSION['role'] > 1 && $_SESSION['role']<=$rs['status'])) && $rs['status'] != 4){
+	if(($_SESSION['role'] == 1 && $_SESSION['uID'] != $rs['sName']) ||
+	  ($_SESSION['role'] > 1 && $_SESSION['role'] <= $rs['status'] && !($_SESSION['role'] == 4 && $rs['status'] == 4)) ||
+	  (($_SESSION['role'] == 2 || $_SESSION['role'] == 3) && $rs['status'] == 0)){
 		continue;
 	}
 	echo "<tr ><td>" . $rs['sName'] . "</td>";

@@ -5,6 +5,11 @@ if (! isset($_SESSION['uID']) or $_SESSION['uID']<="") {
 } 
 $role=$_SESSION['role'];
 require("todoModel.php");
+if (isset($_GET['m'])){
+	$msg="<font color='red'>" . $_GET['m'] . "</font>";
+} else {
+	$msg="Good morning";
+}
 $result=getJobList($role);
 $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核中','通過');
 ?>
@@ -16,19 +21,20 @@ $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核
 </head>
 
 <body>
+<div><?php echo $msg; ?></div><hr>
 <table width=80% border="1">
   <tr>
-    <td>學號</td>
     <td>姓名</td>
+    <td>學號</td>
     <td>父</td>
 	<td>母</td>
     <td>申請補助種類</td>
 	<td>申請狀態</td>
 <?php
-	if($_SESSION['role'] >= 2){
+	if($_SESSION['role'] >= 3){
 		echo "<td>導師訪視說明</td>";
 	}
-	elseif($_SESSION['role'] >= 3){
+	elseif($_SESSION['role'] >= 4){
 		echo "<td>補助金額</td>";
 		echo "<td>秘書審查意見</td>";
 	}
@@ -39,27 +45,27 @@ $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核
   </tr>
 <?php
 while ($rs=mysqli_fetch_assoc($result)){
-	if($_SESSION['role']<$rs['status']){
+	if($_SESSION['role']<=$rs['status']){
 		continue;
 	}
 	if($_SESSION['role']==1 && $_SESSION['uID'] != $rs['sName']){
 		continue;
 	}
-	echo "<tr ><td>" . $rs['sID'] . "</td>";
-	echo "<td>".$rs['sName']."</td>";
+	echo "<tr ><td>" . $rs['sName'] . "</td>";
+	echo "<td>".$rs['sID']."</td>";
 	echo "<td>".$rs['father']."</td>";
 	echo "<td>".$rs['mother']."</td>";
 	echo "<td>".$rs['category']."</td>";
 	echo "<td>".$jobStatus[$rs['status']]."</td>" ;
-	if($_SESSION['role'] >= 2){
+	if($_SESSION['role'] >= 3){
 		echo "<td>" , htmlspecialchars($rs['mComment']), "</td>";
 	}
-	elseif($_SESSION['role'] >= 3){
+	elseif($_SESSION['role'] >= 4){
 		echo "<td>".$rs['money']."</td>";
 		echo "<td>" , htmlspecialchars($rs['sComment']), "</td>";
 	}
-	if($_SESSION['role'] == 2 || $_SESSION['role'] == 3){
-		echo "<td><a href='todoEditForm.php'>審核</a></td>";
+	if(($_SESSION['role'] == 2 || $_SESSION['role'] == 3) && $_SESSION['role'] == $rs['status']+1){
+		echo "<td><a href='todoEditForm.php?sID=".$rs['sID']."'>簽核</a></td>";
 	}
 	echo "</tr>";
 }

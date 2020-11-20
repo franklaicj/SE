@@ -14,39 +14,24 @@ function cancelJob($jobID) {
 	//return T/F
 }
 
-function updateJob($id,$title,$msg, $urgent) {
+function updateJob($sID,$father,$mother,$category,$mComment,$money,$sComment,$status) {
 	global $conn;
-	if ($id== -1) {
-		addJob($title,$msg, $urgent);
-	} else {
-		$sql = "update todo set title='$title', content='$msg', urgent='$urgent' where id=$id;";
-		mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL
-	}
+	$sql = "update student set father='$father', mother='$mother', category='$category', mComment='$mComment', money='$money', sComment='$sComment', status='$status'+1 where sID=$sID;";
+	mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL
 }
 
 function getJobList($role) {
 	global $conn;
-	if ($role) {
-		$sql = "SELECT * FROM student where status <= $role;";
-	}
+	$sql = "SELECT * FROM student where status <= $role order by status desc;";
 	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
 	return $result;
 }
 
-function getJobDetail($id) {
+function getJobDetail($sID) {
 	global $conn;
-	if ($id == -1) { //-1 stands for adding a new record
-		$rs=[
-			"id" => -1,
-			"title" => "new title",
-			"content" => "job description",
-			"urgent" => "一般"
-		];
-	} else {
-		$sql = "select id, title, content, urgent from todo where id=$id;";
-		$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
-		$rs=mysqli_fetch_assoc($result);
-	}
+	$sql = "select * from student where sID=$sID;";
+	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
+	$rs=mysqli_fetch_assoc($result);
 	return $rs;
 }
 

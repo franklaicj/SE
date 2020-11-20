@@ -1,16 +1,21 @@
 <?php
 require("todoModel.php");
 
-$title=mysqli_real_escape_string($conn,$_POST['title']);
-$msg=mysqli_real_escape_string($conn,$_POST['msg']);
-$id=(int)$_POST['id'];
-$urgent=mysqli_real_escape_string($conn,$_POST['urgent']);
+$sID=(int)$_POST['sID'];
+$sName=mysqli_real_escape_string($conn,$_POST['sName']);
+$father=mysqli_real_escape_string($conn,$_POST['father']);
+$mother=mysqli_real_escape_string($conn,$_POST['mother']);
+$category=mysqli_real_escape_string($conn,$_POST['category']);
+$mComment=mysqli_real_escape_string($conn,$_POST['mComment']);
+$money=(int)$_POST['money'];
+$sComment=mysqli_real_escape_string($conn,$_POST['sComment']);
+$status=(int)$_POST['status'];
 
-if ($title) { //if title is not empty
-	updateJob($id,$title,$msg, $urgent);
-	$msg="Message updateded";
+if ($sID) { //if title is not empty
+	updateJob($sID, $father, $mother, $category, $mComment, $money, $sComment ,$status);
+	$msg="簽核成功";
 } else {
-	$msg= "Message title cannot be empty";
+	$msg= "請填寫";
 }
 header("Location: todoListView.php?m=$msg");
 ?>

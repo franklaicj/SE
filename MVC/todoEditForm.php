@@ -6,8 +6,8 @@ if (! isset($_SESSION['uID'])) {
 
 require("todoModel.php");
 
-$id = (int)$_GET['id'];
-$rs = getJobDetail($id);
+$sID = (int)$_GET['sID'];
+$rs = getJobDetail($sID);
 if (! $rs) {
 	echo "no data found";
 	exit(0);
@@ -21,26 +21,44 @@ if (! $rs) {
 <title>無標題文件</title>
 </head>
 <body>
-<h1>Edit Task</h1>
+<?php
+	if($_SESSION['role']==2){
+		echo "<h1>導師簽核</h1>";
+	}
+	elseif($_SESSION['role']==3){
+		echo "<h1>秘書簽核</h1>";
+	}
+?>
 <form method="post" action="todoUpdControl.php">
 
-	  <input type='hidden' name='id' value='<?php echo $id ?>'>
+<?php 
+		echo '姓名: <input type="text" name="sName" value="'.$rs['sName'].'" readonly="readonly">';
 
-      task title: <input name="title" type="text" id="title" value="<?php echo htmlspecialchars($rs['title']);?>" /> <br>
+		echo '學號: <input type="number" name="sID" value="'.$rs['sID'].'" readonly="readonly">';
 
-      task description: <input name="msg" type="text" id="msg" value="<?php echo htmlspecialchars($rs['content']);?>" /> <br>
+		echo '父: <input type="text" name="father" value="'.$rs['father'].'">';
+		  
+		echo '母: <input type="text" name="mother" value="'.$rs['mother'].'">';
 
-	  Urgent Level: <select  name="urgent" type="select" id="urgent" /> 
-				<?php
-					echo "<option value='{$rs['urgent']}'>{$rs['urgent']}</option>";
-				?>
-					<option value='一般'>一般</option>
-					<option value='重要'>重要</option>
-					<option value='緊急'>緊急</option>
-					</select>
-	  <br>
+	  	echo '申請補助種類:<select  name="category" type="select">';
+			echo "<option value='{$rs['category']}'>{$rs['category']}</option>";
+			echo "<option value='低收入戶'>低收入戶</option>";
+			echo "<option value='中低收入戶'>中低收入戶</option>";
+			echo "<option value='家庭突發因素'>家庭突發因素</option></select><br><br>";
 
-      <input type="submit" name="Submit" value="送出" />
+		echo '<input type="hidden" name="status" value="'.$rs['status'].'">';
+
+		if($_SESSION['role']==2){
+			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100>';
+			echo '補助金額:<input type="hidden" name="money" value="'.$rs['money'].'">';
+			echo '導師訪視說明:<input style="height:80px" type="hidden" name="sComment" value="'.$rs['sComment'].'" size=100>';
+		}elseif($_SESSION['role']==3){
+			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100 readonly="readonly"><br><br>';
+			echo '補助金額:<input type="number" name="money" value="'.$rs['money'].'"><br><br>';
+			echo '秘書審查意見:<input style="height:80px" type="text" name="sComment" value="'.$rs['sComment'].'" size=100>';
+		}
+?>		
+	<br><input type="submit" name="Submit" value="送出" />
 	</form>
   </tr>
 </table>

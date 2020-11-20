@@ -21,7 +21,8 @@ $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核
 </head>
 
 <body>
-<div><?php echo $msg; ?></div><hr>
+<div><?php echo $msg; ?></div><br>
+<a href='loginForm.php'>登出</a><hr>
 <table width=80% border="1">
   <tr>
     <td>姓名</td>
@@ -34,21 +35,18 @@ $jobStatus = array('未通過','導師審核中','秘書審核中','校長審核
 	if($_SESSION['role'] >= 3){
 		echo "<td>導師訪視說明</td>";
 	}
-	elseif($_SESSION['role'] >= 4){
+	if($_SESSION['role'] >= 4){
 		echo "<td>補助金額</td>";
 		echo "<td>秘書審查意見</td>";
 	}
-	if($_SESSION['role'] == 2 || $_SESSION['role'] == 3){
+	if($_SESSION['role'] >= 2){
 		echo "<td>簽注意見</td>";
 	}
 ?>
   </tr>
 <?php
 while ($rs=mysqli_fetch_assoc($result)){
-	if($_SESSION['role']<=$rs['status']){
-		continue;
-	}
-	if($_SESSION['role']==1 && $_SESSION['uID'] != $rs['sName']){
+	if(($_SESSION['role']==1 && $_SESSION['uID'] != $rs['sName']) || ($_SESSION['role'] > 1 && $_SESSION['role']<=$rs['status'])){
 		continue;
 	}
 	echo "<tr ><td>" . $rs['sName'] . "</td>";
@@ -60,11 +58,11 @@ while ($rs=mysqli_fetch_assoc($result)){
 	if($_SESSION['role'] >= 3){
 		echo "<td>" , htmlspecialchars($rs['mComment']), "</td>";
 	}
-	elseif($_SESSION['role'] >= 4){
+	if($_SESSION['role'] >= 4){
 		echo "<td>".$rs['money']."</td>";
 		echo "<td>" , htmlspecialchars($rs['sComment']), "</td>";
 	}
-	if(($_SESSION['role'] == 2 || $_SESSION['role'] == 3) && $_SESSION['role'] == $rs['status']+1){
+	if($_SESSION['role'] >= 2 && $_SESSION['role'] == $rs['status']+1){
 		echo "<td><a href='todoEditForm.php?sID=".$rs['sID']."'>簽核</a></td>";
 	}
 	echo "</tr>";

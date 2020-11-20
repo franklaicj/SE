@@ -28,6 +28,9 @@ if (! $rs) {
 	elseif($_SESSION['role']==3){
 		echo "<h1>秘書簽核</h1>";
 	}
+	elseif($_SESSION['role']==4){
+		echo "<h1>校長簽核</h1>";
+	}
 ?>
 <form method="post" action="todoUpdControl.php">
 
@@ -51,13 +54,23 @@ if (! $rs) {
 		if($_SESSION['role']==2){
 			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100>';
 			echo '補助金額:<input type="hidden" name="money" value="'.$rs['money'].'">';
-			echo '導師訪視說明:<input style="height:80px" type="hidden" name="sComment" value="'.$rs['sComment'].'" size=100>';
+			echo '導師訪視說明:<input style="height:80px" type="hidden" name="sComment" value="'.$rs['sComment'].'" size=100><br><br>';
+			echo '<input type="hidden" name="decision" value="confirm">
+				  <input type="hidden" name="decision" value="reject">';
 		}elseif($_SESSION['role']==3){
 			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100 readonly="readonly"><br><br>';
 			echo '補助金額:<input type="number" name="money" value="'.$rs['money'].'"><br><br>';
-			echo '秘書審查意見:<input style="height:80px" type="text" name="sComment" value="'.$rs['sComment'].'" size=100>';
+			echo '秘書審查意見:<input style="height:80px" type="text" name="sComment" value="'.$rs['sComment'].'" size=100><br><br>';
+			echo '<input type="hidden" name="decision" value="confirm">
+				  <input type="hidden" name="decision" value="reject">';
+		}elseif($_SESSION['role']==4){
+			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100 readonly="readonly"><br><br>';
+			echo '補助金額:<input type="number" name="money" value="'.$rs['money'].'" readonly="readonly"><br><br>';
+			echo '秘書審查意見:<input style="height:80px" type="text" name="sComment" value="'.$rs['sComment'].'" size=100 readonly="readonly"><br><br>';
+			echo '<input type="radio" name="decision" value="confirm">同意<br>
+				  <input type="radio" name="decision" value="reject">否決';
 		}
-?>		
+?>
 	<br><input type="submit" name="Submit" value="送出" />
 	</form>
   </tr>

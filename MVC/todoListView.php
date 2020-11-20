@@ -3,17 +3,10 @@ session_start();
 if (! isset($_SESSION['uID']) or $_SESSION['uID']<="") {
 	header("Location: loginForm.php");
 } 
-if ($_SESSION['uID']=='boss'){
-	$bossMode = 1;
-} else {
-	$bossMode=0;
-}
+$role=$_SESSION['role'];
 require("todoModel.php");
-
-$result=getJobList($bossMode);
-$jobStatus = array('未完成','已完成');
-
-
+$result=getJobList($role);
+$jobStatus = array('未通過','導師審核中','秘書審核中','校長審核中','通過');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,53 +16,58 @@ $jobStatus = array('未完成','已完成');
 </head>
 
 <body>
-
-<p>my Todo List !! </p>
-<hr />
-
-<table width="200" border="1">
+<table width=80% border="1">
   <tr>
-    <td>id</td>
-    <td>name</td>
-    <td>father</td>
-    <td>mother</td>
-	<td>category</td>
-    <td>mComment</td>
-	<td>sComment</td>
-	<td>sResult</td>
-	<td>pass</td>
+    <td>學號</td>
+    <td>姓名</td>
+    <td>父</td>
+	<td>母</td>
+    <td>申請補助種類</td>
+	<td>申請狀態</td>
+<?php
+	if($_SESSION['role'] >= 2){
+		echo "<td>導師訪視說明</td>";
+	}
+	elseif($_SESSION['role'] >= 3){
+		echo "<td>補助金額</td>";
+		echo "<td>秘書審查意見</td>";
+	}
+	if($_SESSION['role'] == 2 || $_SESSION['role'] == 3){
+		echo "<td>簽注意見</td>";
+	}
+?>
   </tr>
 <?php
-
-    echo "<tr><td>" . $rs['sID'] . "</td>";
-	echo "<td>" , htmlspecialchars($rs['sName']), "</td>";
-	echo "<td>" , htmlspecialchars($rs['father']), "</td>";
-	echo "<td>" , htmlspecialchars($rs['mother']), "</td>";
-	echo "<td>" . $rs['category'] . "</td>";
-	echo "<td>" . $rs['mComment'] . "</td>";
-	echo "<td>" . $rs['sComment'] . "</td>";
-	echo "<td>" . $rs['sResult'] . "</td>";
-	echo "<td>{$jobStatus[$rs['pass']]}</td><td>";
-	
-	switch($rs['status']) {
-		case 0:
-			if ($bossMode) {
-				echo "<a href='todoEditForm.php?id={$rs['id']}'>Edit</a>  ";	
-				echo "<a href='todoSetControl.php?act=cancel&id={$rs['id']}'>Cancel</a>  " ;
-			} else {
-				echo "<a href='todoSetControl.php?act=finish&id={$rs['id']}'>Finish</a>  ";
-			}
-
-			break;
-		case 1:
-			echo "<a href='todoSetControl.php?act=reject&id={$rs['id']}'>Reject</a>  ";
-			echo "<a href='todoSetControl.php?act=close&id={$rs['id']}'>Close</a>  ";
-			break;
-		default:
-			break;
+while ($rs=mysqli_fetch_assoc($result)){
+	if($_SESSION['role']<$rs['status']){
+		continue;
 	}
-	echo "</td></tr>";
+	if($_SESSION['role']==1 && $_SESSION['uID'] != $rs['sName']){
+		continue;
+	}
+	echo "<tr ><td>" . $rs['sID'] . "</td>";
+	echo "<td>".$rs['sName']."</td>";
+	echo "<td>".$rs['father']."</td>";
+	echo "<td>".$rs['mother']."</td>";
+	echo "<td>".$rs['category']."</td>";
+	echo "<td>".$jobStatus[$rs['status']]."</td>" ;
+	if($_SESSION['role'] >= 2){
+		echo "<td>" , htmlspecialchars($rs['mComment']), "</td>";
+	}
+	elseif($_SESSION['role'] >= 3){
+		echo "<td>".$rs['money']."</td>";
+		echo "<td>" , htmlspecialchars($rs['sComment']), "</td>";
+	}
+	if($_SESSION['role'] == 2 || $_SESSION['role'] == 3){
+		echo "<td><a href='todoEditForm.php'>審核</a></td>";
+	}
+	echo "</tr>";
+}
 ?>
 </table>
+<?php 
+if ($_SESSION['role']==1)
+	echo "<a href='todoAddForm.php'>申請</a>";
+?>
 </body>
 </html>

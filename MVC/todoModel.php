@@ -1,22 +1,39 @@
 <?php
 require_once("dbconnect.php");
 
-function addForm($sID, $sName, $father, $mother, $category) {
-	
+function addJob($title,$msg, $urgent) {
+	global $conn;
+	$sql = "insert into todo (title, content,urgent, addTime, status) values ('$title','$msg', '$urgent', NOW(),0);";
+	mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL	
 }
 
-function getFormList($bossMode) {
+function cancelJob($jobID) {
 	global $conn;
-	if ($bossMode) {
-		$sql = "select * from student;";
+	$sql = "update todo set status = 3 where id=$jobID and status <> 2;";
+	mysqli_query($conn,$sql);
+	//return T/F
+}
+
+function updateJob($id,$title,$msg, $urgent) {
+	global $conn;
+	if ($id== -1) {
+		addJob($title,$msg, $urgent);
 	} else {
-		$sql = "select * from student where sID = [$sID];";
+		$sql = "update todo set title='$title', content='$msg', urgent='$urgent' where id=$id;";
+		mysqli_query($conn, $sql) or die("Insert failed, SQL query error"); //執行SQL
+	}
+}
+
+function getJobList($role) {
+	global $conn;
+	if ($role) {
+		$sql = "SELECT * FROM student where status <= $role;";
 	}
 	$result=mysqli_query($conn,$sql) or die("DB Error: Cannot retrieve message.");
 	return $result;
 }
 
-function getFormDetail($id) {
+function getJobDetail($id) {
 	global $conn;
 	if ($id == -1) { //-1 stands for adding a new record
 		$rs=[
@@ -33,17 +50,20 @@ function getFormDetail($id) {
 	return $rs;
 }
 
-function secretoryFinished($sID) {
-
+function setFinished($jobID) {
+	global $conn;
+	$sql = "update todo set status = 1, finishTime=NOW() where id=$jobID and status = 0;";
+	mysqli_query($conn,$sql) or die("MySQL query error"); //執行SQL
+	
 }
 
-function rejectForm($sID){
+function rejectJob($jobID){
 	global $conn;
 	$sql = "update todo set status = 0 where id=$jobID and status = 1;";
 	mysqli_query($conn,$sql);
 }
 
-function casePass($sID) {
+function setClosed($jobID) {
 	global $conn;
 	$sql = "update todo set status = 2 where id=$jobID and status = 1;";
 	mysqli_query($conn,$sql);

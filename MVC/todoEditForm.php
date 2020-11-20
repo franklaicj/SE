@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (! isset($_SESSION['uID']) or $_SESSION['uID']!="boss") {
+if (! isset($_SESSION['uID'])) {
 	header("Location: loginForm.php");
 } 
 

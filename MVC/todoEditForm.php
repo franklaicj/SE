@@ -53,8 +53,8 @@ if (! $rs) {
 
 		if($_SESSION['role']==2){
 			echo '導師訪視說明:<input style="height:80px" type="text" name="mComment" value="'.$rs['mComment'].'" size=100>';
-			echo '補助金額:<input type="hidden" name="money" value="'.$rs['money'].'">';
-			echo '導師訪視說明:<input style="height:80px" type="hidden" name="sComment" value="'.$rs['sComment'].'" size=100><br><br>';
+			echo '<input type="hidden" name="money" value="'.$rs['money'].'">';
+			echo '<input style="height:80px" type="hidden" name="sComment" value="'.$rs['sComment'].'" size=100><br><br>';
 			echo '<input type="hidden" name="decision" value="confirm">
 				  <input type="hidden" name="decision" value="reject">';
 		}elseif($_SESSION['role']==3){
